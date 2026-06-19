@@ -1574,7 +1574,7 @@ BẮT BUỘC ĐỊNH DẠNG JSON MẢNG TƯƠNG THÍCH HOÀN TOÀN NHƯ SAU:
   {
     "front": "Từ khóa / Cụm từ tiếng Anh",
     "wordForm": "danh từ / động từ / tính từ / trạng từ / idiom / collocation",
-    "back": "Phiên âm IPA - Nghĩa tiếng Việt ngắn gọn - Ví dụ cụ thể (nếu có)"
+    "back": "Phiên âm IPA - Nghĩa tiếng Việt ngắn gọn (BẮT BUỘC BẰNG TIẾNG VIỆT) - Ví dụ cụ thể (nếu có)"
   }
 ]
 - Tách riêng Từ loại (Word Form) CHÍNH XÁC.
@@ -1781,7 +1781,7 @@ BẮT BUỘC ĐỊNH DẠNG JSON MẢNG TƯƠNG THÍCH HOÀN TOÀN NHƯ SAU:
   {
     "front": "Từ khóa / Cụm từ tiếng Anh",
     "wordForm": "danh từ / động từ / tính từ / trạng từ / idiom / collocation",
-    "back": "Phiên âm IPA - Nghĩa tiếng Việt ngắn gọn - Ví dụ cụ thể (nếu có)"
+    "back": "Phiên âm IPA - Nghĩa tiếng Việt ngắn gọn (BẮT BUỘC BẰNG TIẾNG VIỆT) - Ví dụ cụ thể (nếu có)"
   }
 ]
 - Tách riêng Từ loại (Word Form) CHÍNH XÁC.
@@ -2911,7 +2911,7 @@ Return a JSON format matching this EXACT structure:
       "front": "English word/phrase",
       "ipa": "IPA pronunciation if applicable, else empty",
       "wordForm": "v., n., adj., adv., or idiom",
-      "back": "Vietnamese meaning",
+      "back": "Vietnamese meaning (MUST be written in Vietnamese)",
       "example": "An illustrative English sentence",
       "origin": "Etymology or mnemonics (optional)"
     }
@@ -2931,7 +2931,7 @@ Provide ONLY valid JSON.
       "front": "Word",
       "ipa": "",
       "wordForm": "n",
-      "back": "Nghĩa tiếng Việt",
+      "back": "Nghĩa tiếng Việt (BẮT BUỘC BẰNG TIẾNG VIỆT)",
       "incomplete": true
     }
   ]
@@ -2954,7 +2954,7 @@ The input contains EXACTLY ${exactCountValue} items. You MUST return EXACTLY ${e
 DO NOT OUTPUT JSON! You MUST output plain text where each line represents exactly one flashcard.
 Use the exact delimiter ' ||| ' between fields.
 The format for each line MUST be:
-front ||| ipa ||| wordForm ||| back ||| example ||| origin
+front ||| ipa ||| wordForm ||| back (must be in Vietnamese) ||| example ||| origin
 
 Rule Checklist:
 1. Return ONLY pure text, ONE card per line.
@@ -2973,7 +2973,7 @@ The input contains EXACTLY ${exactCountValue} items. You MUST return EXACTLY ${e
 DO NOT OUTPUT JSON! You MUST output plain text where each line represents exactly one flashcard.
 Use the exact delimiter ' ||| ' between fields.
 The format for each line MUST be:
-front ||| ipa ||| wordForm ||| back
+front ||| ipa ||| wordForm ||| back (must be in Vietnamese)
 
 (IMPORTANT: Drop 'example' and 'origin' fields completely).
 
@@ -3505,7 +3505,7 @@ Nhiệm vụ của bạn là nhận vào một chuỗi văn bản (có thể là
     "front": "Từ khóa / thuật ngữ / câu hỏi tiếng Anh",
     "wordForm": "từ loại (noun/verb/adj/adv...) nếu có, nếu không thì ghi rỗng",
     "ipa": "phiên âm IPA nếu có",
-    "back": "Nghĩa tiếng Việt ngắn gọn, súc tích",
+    "back": "Nghĩa tiếng Việt ngắn gọn, súc tích (BẮT BUỘC BẰNG TIẾNG VIỆT)",
     "example": "ví dụ thực tế nếu có"
   }
 ]
