@@ -92,8 +92,8 @@ export const getLevelInfo = (rawXp: number) => {
 
 export const getCustomTitleTextClass = (title?: string, fallbackClass?: string) => {
   if (title === "Quân Vương Triết Học") {
-    // 7 colors
-    return "text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 via-green-500 via-blue-500 to-purple-500 animate-rainbow-text font-black";
+    // Standardize to valid 3-color tailwind gradient + apply custom animated class
+    return "text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-purple-500 animate-rainbow-text bg-size-200 font-black";
   }
   if (title === "Thủ Lĩnh Sparta") {
     return "text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-emerald-500 font-black";
@@ -118,17 +118,17 @@ export const getCustomTitleTextClass = (title?: string, fallbackClass?: string) 
 
 export const BORDERS_REGISTRY = [
   { id: "none", label: "Mặc định (Không viền)", color: "" },
-  { id: "bronze", label: "Huy hiệu Đồng", color: "ring-4 ring-[#cd7f32] shadow-[0_0_15px_rgba(205,127,50,0.5)]" },
-  { id: "silver", label: "Huy hiệu Bạc", color: "ring-4 ring-[#c0c0c0] shadow-[0_0_15px_rgba(192,192,192,0.5)]" },
-  { id: "gold", label: "Huy hiệu Vàng", color: "ring-4 ring-[#ffd700] shadow-[0_0_15px_rgba(255,215,0,0.5)]" },
-  { id: "diamond", label: "Huy hiệu Kim Cương", color: "ring-4 ring-[#00ffff] shadow-[0_0_20px_rgba(0,255,255,0.6)] animate-pulse" },
+  { id: "bronze", label: "Huy hiệu Đồng", color: "ring-4 ring-amber-700 shadow-[0_0_15px_rgba(180,83,9,0.5)]" },
+  { id: "silver", label: "Huy hiệu Bạc", color: "ring-4 ring-zinc-300 shadow-[0_0_15px_rgba(212,212,216,0.5)]" },
+  { id: "gold", label: "Huy hiệu Vàng", color: "ring-4 ring-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.5)]" },
+  { id: "diamond", label: "Huy hiệu Kim Cương", color: "ring-4 ring-cyan-300 shadow-[0_0_20px_rgba(103,232,249,0.6)] animate-pulse" },
   { id: "streak_3", label: "Vòng Ánh Sáng Động Thạch", color: "ring-4 ring-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.3)]" },
   { id: "points_100", label: "Viền Tinh Thạch Học Giả", color: "ring-4 ring-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)]" },
-  { id: "streak_10", label: "Khung Ý Chí Khắc Kỷ", color: "ring-4 ring-orange-500/80 shadow-[0_0_20px_rgba(234,179,8,0.5)]" },
-  { id: "points_1000", label: "Viền Kim Long Cấp", color: "ring-4 ring-[#ffd700] ring-offset-2 ring-offset-transparent shadow-[0_0_20px_rgba(255,215,0,0.5)]" },
-  { id: "streak_50", label: "Hào Quang Bán Thần", color: "border-4 border-transparent bg-gradient-to-br from-purple-400 to-fuchsia-600 bg-clip-border shadow-[0_0_30px_rgba(192,132,252,0.6)] animate-pulse" },
-  { id: "mastery_95", label: "Lời Nguyền Từ Các Nữ Thần", color: "border-4 border-fuchsia-500 shadow-[0_0_30px_rgba(217,70,239,0.7)]" },
-  { id: "top1_10", label: "Đế Cung Ánh Sáng", color: "ring-[6px] ring-orange-400 shadow-[0_0_40px_rgba(250,204,21,0.8)] animate-rainbow-bg" },
+  { id: "streak_10", label: "Khung Ý Chí Khắc Kỷ", color: "ring-4 ring-orange-500 shadow-[0_0_20px_rgba(234,179,8,0.5)]" },
+  { id: "points_1000", label: "Viền Kim Long Cấp", color: "ring-4 ring-yellow-500 ring-offset-2 ring-offset-transparent shadow-[0_0_20px_rgba(234,179,8,0.5)]" },
+  { id: "streak_50", label: "Hào Quang Bán Thần", color: "ring-4 ring-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.6)] animate-pulse" },
+  { id: "mastery_95", label: "Lời Nguyền Từ Các Nữ Thần", color: "ring-4 ring-fuchsia-500 shadow-[0_0_30px_rgba(217,70,239,0.7)]" },
+  { id: "top1_10", label: "Đế Cung Ánh Sáng", color: "ring-[6px] ring-orange-400 shadow-[0_0_40px_rgba(250,204,21,0.8)] animate-rainbow-bg bg-size-200" },
   { id: "time_600", label: "Vầng Sáng Sáng Thế", color: "ring-4 ring-rose-500 shadow-[0_0_30px_rgba(244,63,94,0.6)] animate-pulse" },
 ];
 

@@ -2742,41 +2742,48 @@ export default function StudyRoom() {
                     )}
                   {!isEditing ? (
                     <div className="relative flex flex-col items-center justify-center min-h-[60px] w-full px-8">
-                      {currentCard?.wordForm && (
-                        <span
-                          className={cn(
-                            "text-[12px] uppercase font-bold tracking-wider mb-2 px-3 py-1 rounded shadow-sm",
-                            currentCard.wordForm
-                              .toLowerCase()
-                              .includes("noun") ||
-                              currentCard.wordForm.toLowerCase() === "n"
-                              ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50"
-                              : currentCard.wordForm
-                                    .toLowerCase()
-                                    .includes("verb") ||
-                                  currentCard.wordForm.toLowerCase() === "v"
-                                ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800/50"
-                                : currentCard.wordForm
-                                      .toLowerCase()
-                                      .includes("adj")
-                                  ? "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border border-orange-200 dark:border-orange-800/50"
-                                  : currentCard.wordForm
-                                        .toLowerCase()
-                                        .includes("adv")
-                                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50"
-                                    : currentCard.wordForm
-                                          .toLowerCase()
-                                          .includes("idiom") ||
-                                        currentCard.wordForm
-                                          .toLowerCase()
-                                          .includes("colloc")
-                                      ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 border border-purple-200 dark:border-purple-800/50"
-                                      : "bg-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border border-zinc-300 dark:border-zinc-700",
-                          )}
-                        >
-                          [{currentCard.wordForm}]
-                        </span>
-                      )}
+                      {(() => {
+                         let computedForm = currentCard?.wordForm;
+                         if (!computedForm) {
+                            const frontText = currentCard?.front || (currentCard as any)?.word || "";
+                            const check = detectLanguage(frontText);
+                            if (check.isAvailable && check.locale === "en-US") {
+                               const backText = currentCard?.back || (currentCard as any)?.meaning || "";
+                               const match = backText.match(/\((n|v|adj|adv|prep|conj|pron|idiom|phrasal verb)\)/i);
+                               if (match) {
+                                  computedForm = match[1];
+                               } else {
+                                  const tokens = frontText.trim().split(/\s+/);
+                                  if (tokens.length >= 3) computedForm = "idiomatic expression";
+                                  else if (tokens.length === 2) computedForm = "collocation";
+                                  else computedForm = "vocabulary";
+                               }
+                            }
+                         }
+
+                         if (!computedForm) return null;
+
+                         return (
+                           <span
+                             className={cn(
+                               "text-[12px] uppercase font-bold tracking-wider mb-2 px-3 py-1 rounded shadow-sm",
+                               computedForm.toLowerCase().includes("noun") || computedForm.toLowerCase() === "n"
+                                 ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50"
+                                 : computedForm.toLowerCase().includes("verb") || computedForm.toLowerCase() === "v"
+                                 ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800/50"
+                                 : computedForm.toLowerCase().includes("adj")
+                                 ? "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border border-orange-200 dark:border-orange-800/50"
+                                 : computedForm.toLowerCase().includes("adv")
+                                 ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50"
+                                 : computedForm.toLowerCase().includes("idiom") || computedForm.toLowerCase().includes("colloc")
+                                 ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 border border-purple-200 dark:border-purple-800/50"
+                                 : "bg-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 border border-zinc-300 dark:border-zinc-700",
+                             )}
+                           >
+                             [{computedForm}]
+                           </span>
+                         );
+                      })()}
                       {isClozeMode ? (
                         <div className="py-4 w-full flex justify-center items-center">
                           {renderStudyCloze()}

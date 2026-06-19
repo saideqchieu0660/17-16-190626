@@ -52,9 +52,6 @@ export default function AuthScreen() {
     isExecutingAuth.current = true;
 
     try {
-      const { setPersistence, browserLocalPersistence } = await import("firebase/auth");
-      await setPersistence(auth, browserLocalPersistence);
-
       if (isLogin) {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         
@@ -179,8 +176,6 @@ export default function AuthScreen() {
     const provider = new GoogleAuthProvider();
     
     try {
-      const { setPersistence, browserLocalPersistence } = await import("firebase/auth");
-      await setPersistence(auth, browserLocalPersistence);
       let userCredential;
       const authCurrentUser = auth.currentUser;
       
@@ -244,6 +239,7 @@ export default function AuthScreen() {
       const isExplicitlyStudentMode = sessionStorage.getItem('isAdminMode') === 'false';
       navigate(isTeacher && !isExplicitlyStudentMode ? '/teacher' : '/dashboard');
     } catch (err: any) {
+      console.error(err);
       setError(err.message || "Lỗi đăng nhập bằng Google.");
     } finally {
       setIsLoading(false);

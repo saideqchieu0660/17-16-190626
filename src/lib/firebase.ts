@@ -77,11 +77,23 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
 // MỚI: CÁC HÀM CRUD THEO KIẾN TRÚC MỚI (CHƯA THAY THẾ STORE CŨ)
 // ==========================================
 
+export const withTimeout = <T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> => {
+  let timeoutId: NodeJS.Timeout;
+  const timeoutPromise = new Promise<T>((resolve) => {
+    timeoutId = setTimeout(() => resolve(fallback), ms);
+  });
+  return Promise.race([
+    promise.finally(() => clearTimeout(timeoutId)),
+    timeoutPromise
+  ]);
+};
+
 export const dbService = {
   // --- USERS CORE (Profile) ---
   getUserProfile: async (uid: string) => {
     const docRef = doc(db, `users/${uid}`);
-    const snap = await getDoc(docRef);
+    const snap = await withTimeout(getDoc(docRef), 6000, null as any);
+    if (!snap) return null;
     return snap.exists() ? snap.data() : null;
   },
   
@@ -116,35 +128,35 @@ export const dbService = {
     }
 
     const docRef = doc(db, `users/${uid}`);
-    await setDoc(docRef, data, { merge: true });
+    setDoc(docRef, data, { merge: true }).catch(e => console.warn("Background setDoc failed:", e));
   },
 
   updateApiToggles: async (payload: any) => {
     const docRef = doc(db, 'system_config/api_toggles');
-    await setDoc(docRef, { ...payload, updatedAt: new Date().toISOString() }, { merge: true });
+    await withTimeout(setDoc(docRef, { ...payload, updatedAt: new Date().toISOString() }, { merge: true }), 5000, null);
   },
 
   deleteUserProfile: async (uid: string) => {
     // 1. Delete main user profile doc
     const userDocRef = doc(db, `users/${uid}`);
-    await deleteDoc(userDocRef);
+    await withTimeout(deleteDoc(userDocRef), 5000, null);
 
     // 2. Delete card states subcollection docs
     const cardStatesCol = collection(db, `users/${uid}/cardsState`);
-    const cardStatesSnap = await getDocs(cardStatesCol);
+    const cardStatesSnap = await withTimeout(getDocs(cardStatesCol), 5000, { docs: [] } as any);
     for (const cardDoc of cardStatesSnap.docs) {
-      await deleteDoc(doc(db, `users/${uid}/cardsState/${cardDoc.id}`));
+      await withTimeout(deleteDoc(doc(db, `users/${uid}/cardsState/${cardDoc.id}`)), 5000, null);
     }
 
     // 3. Remove user from all study groups' members lists
     const groupsCol = collection(db, "groups");
-    const groupsSnap = await getDocs(groupsCol);
+    const groupsSnap = await withTimeout(getDocs(groupsCol), 5000, { docs: [] } as any);
     for (const groupDoc of groupsSnap.docs) {
       const gData = groupDoc.data();
       if (gData.members && Array.isArray(gData.members) && gData.members.includes(uid)) {
-        await updateDoc(doc(db, "groups", groupDoc.id), {
+        await withTimeout(updateDoc(doc(db, "groups", groupDoc.id), {
           members: arrayRemove(uid)
-        });
+        }), 5000, null);
       }
     }
   },
@@ -152,37 +164,38 @@ export const dbService = {
   // --- PREFERENCES ---
   updatePreferences: async (uid: string, prefs: any) => {
     const docRef = doc(db, `users/${uid}/preferences/main`);
-    await setDoc(docRef, prefs, { merge: true });
+    setDoc(docRef, prefs, { merge: true }).catch(console.warn);
   },
 
   // --- CARDS STATE (Mastery) ---
   setCardState: async (uid: string, cardId: string, state: any) => {
     const docRef = doc(db, `users/${uid}/cardsState/${cardId}`);
-    await setDoc(docRef, state, { merge: true });
+    setDoc(docRef, state, { merge: true }).catch(console.warn);
   },
   
   getCardState: async (uid: string, cardId: string) => {
     const docRef = doc(db, `users/${uid}/cardsState/${cardId}`);
-    const snap = await getDoc(docRef);
+    const snap = await withTimeout(getDoc(docRef), 5000, null as any);
+    if (!snap) return null;
     return snap.exists() ? snap.data() : null;
   },
 
   getAllCardStates: async (uid: string) => {
     const colRef = collection(db, `users/${uid}/cardsState`);
-    const snap = await getDocs(colRef);
-    return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const snap = await withTimeout(getDocs(colRef), 6000, { docs: [] } as any);
+    return snap.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
   },
 
   // --- PROGRESS ---
   updateProgress: async (uid: string, progressUpdates: any) => {
     const docRef = doc(db, `users/${uid}/progress/main`);
-    await setDoc(docRef, progressUpdates, { merge: true });
+    setDoc(docRef, progressUpdates, { merge: true }).catch(console.warn);
   },
 
   // --- RESOURCES (Google Drive Static URLs) ---
   addResource: async (name: string, type: string, driveUrl: string) => {
-    const docRef = await addDoc(collection(db, "resources"), { name, type, driveUrl });
-    return docRef.id;
+    const docRef = await withTimeout(addDoc(collection(db, "resources"), { name, type, driveUrl }), 5000, { id: 'local_' + Date.now() });
+    return docRef?.id;
   }
 };
 

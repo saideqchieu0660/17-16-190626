@@ -19,6 +19,23 @@
   --color-gold-500: #f97316;
   --color-gold-600: #ea580c;
   --color-cyber-gold: #f97316;
+
+  --animate-rainbow-text: rainbow-text 3s linear infinite;
+  --animate-rainbow-bg: rainbow-bg 3s linear infinite;
+}
+
+@keyframes rainbow-text {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes rainbow-bg {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@layer utilities {
+  .bg-size-200 { background-size: 200% 200%; }
 }
 
 @layer base {

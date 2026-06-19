@@ -586,10 +586,11 @@ export const store = {
 
         // Hydrate Sets from Firestore
         try {
+            const { withTimeout } = await import('./firebase');
             const setsCol = collection(db, "sets");
-            let setsSnapshot = await getDocs(setsCol);
+            let setsSnapshot = await withTimeout(getDocs(setsCol), 6000, { empty: true, forEach: () => {} } as any);
             
-            if (setsSnapshot.empty) {
+            if (setsSnapshot.empty && setsSnapshot.forEach) {
                 // Seed standard static decks into Firestore
                 const defaultDecks = [
                   {
